@@ -1,6 +1,6 @@
 import mysql.connector
-from Idioma import Idioma
 from Admin_idioma import Admin_idioma
+from Idioma import Idioma
 
 menu = True
 while menu:
@@ -29,11 +29,16 @@ while menu:
         mensaje= adm_idioma.update(update_idioma)
         print(mensaje)
     elif opcion == "4":
-        print("En construcción")
-        pass
+        dato= input("Ingresar idioma que desea borrar: ")
+        delete_idioma= Idioma(dato)
+        adm_idioma = Admin_idioma()
+        mensaje= adm_idioma.delete(delete_idioma)
+        print(mensaje)
     elif opcion == "0":
+        Admin_idioma().cerrar_conexión()
         print("Hasta Luego!!")
         menu = False
+        
         
     else: 
         print("Ha introducido un valor de opción incorrecto, ha introducido '{}' y las opciones disponibles son (0,1,2,3,4)\n ")

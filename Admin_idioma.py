@@ -3,54 +3,46 @@ from mysql.connector import cursor
 
 class Admin_idioma:
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='root', password='lenovo1', host='localhost', database="´musica´")
+        self.cnx = mysql.connector.connect(user='root', password='root', host='localhost', database="´musica´")
 
     def comprobar(self,idioma):
         cursor=self.cnx.cursor()
-        idioma = idioma.getNombre().lower().capitalize()
-        select = "select nombre from idioma id where id.nombre like '%"+idioma+"%'"
+        select = "select nombre from idioma id where id.nombre like '%"+str(idioma)+"%'"
         cursor.execute(select)
         result = cursor.fetchone()
         if result is None:
             comprobacion = True
-            select_id= "Select ididioma from idioma id where id.nombre like '%"+idioma+"%'"
+            select_id= "Select ididioma from idioma id where id.nombre like '%"+str(idioma)+"%'"
             cursor.execute(select_id)
             id_result = cursor.fetchone()
             cursor.close()
-            self.cnx.close()
             return comprobacion, " "
         else:
             comprobacion = False
-            select_id= "Select ididioma from idioma id where id.nombre like '%"+idioma+"%'"
+            select_id= "Select ididioma from idioma id where id.nombre like '%"+str(idioma)+"%'"
             cursor.execute(select_id)
             id_result = cursor.fetchone()
             cursor.close()
-            self.cnx.close()
             return comprobacion, str(id_result[0])
     def create(self,idioma):
         comprobacion,id_idioma = self.comprobar(idioma)
-        idioma = idioma.getNombre().lower().capitalize()
         self.cnx._open_connection()
         cursor=self.cnx.cursor()
         if comprobacion == True:
-            insert= "insert into idioma (nombre) values ('"+idioma+"')"
+            insert= "insert into idioma (nombre) values ('"+str(idioma)+"')"
             cursor.execute(insert)
             self.cnx.commit()
             mensaje = "Se ha insertado el idioma "+idioma+" a la base de datos"
             cursor.close()
-            self.cnx.close()
         else:
             mensaje = "El idioma "+idioma+" ya existe en la base de datos"
             cursor.close()
-            self.cnx.close()
         return mensaje
 
     def update(self,idioma):
         comprobacion,id_idioma = self.comprobar(idioma)
-        self.cnx._open_connection()
         cursor=self.cnx.cursor()
         if comprobacion == False:
-            idioma_previo = idioma.getNombre().lower().capitalize()
             idioma= input("Qué idioma deseas introducir?")
             idioma = idioma.lower().capitalize()
             actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma[0]
@@ -58,11 +50,10 @@ class Admin_idioma:
             self.cnx.commit()
             mensaje = "Se ha actualizado el idioma "+idioma_previo+" a "+idioma
             cursor.close()
-            self.cnx.close()
         else:
-            mensaje = "El idioma "+idioma+" No existe en la base de datos"
+            mensaje = "El idioma "+idioma+" No existe en la base de datos, por lo que no se puede actualizar\n"
             cursor.close()
-            self.cnx.close()
+        return mensaje
     def select_All(self):
         self.cnx._open_connection()
         cursor=self.cnx.cursor()
@@ -76,6 +67,33 @@ class Admin_idioma:
             print( idi[1])
         print("+++++++++++++++++++")
         cursor.close()
-        self.cnx.close()
         return idioma_list ## Return hacer en MAIN
+    def delete(self,idioma):
+        comprobacion,id_idioma = self.comprobar(idioma)
+        cursor = self.cnx.cursor()
+        if comprobacion == False:
+            confirm = True
+            while confirm:
+                confirmacion = input("¿Está seguro que desea borrar el idioma "+str(idioma)+" permanentemente de la base de datos?: ")
+                print("Presione 's' para confirmar y 'n' para volver")
+                confirmacion = confirmacion.lower()
+                if confirmacion == "s":
+                    confirm = False
+                    delete_query= "delete from idioma where ididioma ="+id_idioma
+                    cursor.execute(delete_query)
+                    self.cnx.commit()
+                    mensaje = "Se ha borrado el idioma "+str(idioma)+" de la base de datos---\n"
+                elif confirmacion == 'n':
+                    confirm = False
+                    mensaje = "No se ha borrado ningún registro"
+                else:
+                    print("ERROR, valor incorrecto. Introduzca 's' o 'n' por favor\n")
+        else:
+            mensaje="El idioma "+str(idioma)+," que ha indicado, no existe en la base de datos"
+            cursor.close()
+        return mensaje
+
+    def cerrar_conexión(self):
+        if self.cnx._open_connection:
+            self.cnx.close()
    

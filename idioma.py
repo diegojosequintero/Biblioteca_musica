@@ -9,4 +9,7 @@ class Idioma:
     def setNombre(self,nombre):
         self.__nombre = nombre
     
+    def __str__(self):
+        return self.getNombre().lower().capitalize()
+    
         
