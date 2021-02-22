@@ -3,7 +3,7 @@ from mysql.connector import cursor
 
 class Admin_idioma:
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='root', password='root', host='localhost', database="´musica´")
+        self.cnx = mysql.connector.connect(user='root', password='lenovo1', host='localhost', database="´musica´")
 
     def comprobar(self,idioma):
         cursor=self.cnx.cursor()
@@ -18,12 +18,15 @@ class Admin_idioma:
             id_result = cursor.fetchone()
             cursor.close()
             self.cnx.close()
-            return comprobacion,id_result
+            return comprobacion, " "
         else:
             comprobacion = False
+            select_id= "Select ididioma from idioma id where id.nombre like '%"+idioma+"%'"
+            cursor.execute(select_id)
+            id_result = cursor.fetchone()
             cursor.close()
             self.cnx.close()
-            return comprobacion
+            return comprobacion, str(id_result[0])
     def create(self,idioma):
         comprobacion,id_idioma = self.comprobar(idioma)
         idioma = idioma.getNombre().lower().capitalize()
@@ -44,12 +47,22 @@ class Admin_idioma:
 
     def update(self,idioma):
         comprobacion,id_idioma = self.comprobar(idioma)
-        idioma = idioma.getNombre().lower().capitalize()
         self.cnx._open_connection()
-        cursor=self.cnx.cursor
-        if comprobacion == True:
-            actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma
+        cursor=self.cnx.cursor()
+        if comprobacion == False:
+            idioma_previo = idioma.getNombre().lower().capitalize()
+            idioma= input("Qué idioma deseas introducir?")
+            idioma = idioma.lower().capitalize()
+            actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma[0]
             cursor.execute(actualiza)
+            self.cnx.commit()
+            mensaje = "Se ha actualizado el idioma "+idioma_previo+" a "+idioma
+            cursor.close()
+            self.cnx.close()
+        else:
+            mensaje = "El idioma "+idioma+" No existe en la base de datos"
+            cursor.close()
+            self.cnx.close()
     def select_All(self):
         self.cnx._open_connection()
         cursor=self.cnx.cursor()
@@ -57,12 +70,12 @@ class Admin_idioma:
         cursor.execute(list_all)
         idioma_list = cursor.fetchall()
         print("LISTA DE IDIOMAS:")
+
         print("_________________")
         for idi in idioma_list:
             print( idi[1])
         print("+++++++++++++++++++")
         cursor.close()
         self.cnx.close()
+        return idioma_list ## Return hacer en MAIN
    
-
-         
