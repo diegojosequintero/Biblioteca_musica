@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector import cursor
 
 class Admin_idioma:
     def __init__(self):
@@ -60,4 +61,17 @@ class Admin_idioma:
             mensaje = "El idioma "+idioma+" No existe en la base de datos"
             cursor.close()
             self.cnx.close()
-        
+    def select_All(self):
+        self.cnx._open_connection()
+        cursor=self.cnx.cursor()
+        list_all= 'SELECT * FROM idioma'
+        cursor.execute(list_all)
+        idioma_list = cursor.fetchall()
+        print("LISTA DE IDIOMAS:")
+        print("_________________")
+        for idi in idioma_list:
+            print( idi[1])
+        print("+++++++++++++++++++")
+        cursor.close()
+        self.cnx.close()
+   
