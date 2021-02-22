@@ -68,6 +68,7 @@ class Admin_idioma:
         cursor.execute(list_all)
         idioma_list = cursor.fetchall()
         print("LISTA DE IDIOMAS:")
+        
         print("_________________")
         for idi in idioma_list:
             print( idi[1])
