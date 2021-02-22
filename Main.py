@@ -13,7 +13,9 @@ while menu:
 
     opcion = input("Seleccionar Opción: ")
     if opcion == "1":
-        pass
+        adm_idioma = Admin_idioma()
+        adm_idioma.select_All()
+
     elif opcion == "2":
         dato=input("Ingresar idioma: ")
         insert_idioma = Idioma(dato)

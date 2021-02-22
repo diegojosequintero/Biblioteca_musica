@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector import cursor
 
 class Admin_idioma:
     def __init__(self):
@@ -49,3 +50,19 @@ class Admin_idioma:
         if comprobacion == True:
             actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma
             cursor.execute(actualiza)
+    def select_All(self):
+        self.cnx._open_connection()
+        cursor=self.cnx.cursor()
+        list_all= 'SELECT * FROM idioma'
+        cursor.execute(list_all)
+        idioma_list = cursor.fetchall()
+        print("LISTA DE IDIOMAS:")
+        print("_________________")
+        for idi in idioma_list:
+            print( idi[1])
+        print("+++++++++++++++++++")
+        cursor.close()
+        self.cnx.close()
+   
+
+         
