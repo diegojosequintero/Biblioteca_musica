@@ -7,20 +7,24 @@ class Admin_idioma:
     def comprobar(self,idioma):
         cursor=self.cnx.cursor()
         idioma = idioma.getNombre().lower().capitalize()
-        select = "select count(nombre) from idioma id where id.nombre like '%"+idioma+"%' group by id.nombre"
+        select = "select nombre from idioma id where id.nombre like '%"+idioma+"%'"
         cursor.execute(select)
         result = cursor.fetchone()
         if result is None:
             comprobacion = True
+            select_id= "Select ididioma from idioma id where id.nombre like '%"+idioma+"%'"
+            cursor.execute(select_id)
+            id_result = cursor.fetchone()
             cursor.close()
             self.cnx.close()
+            return comprobacion,id_result
         else:
             comprobacion = False
             cursor.close()
             self.cnx.close()
-        return comprobacion
+            return comprobacion
     def create(self,idioma):
-        comprobacion = self.comprobar(idioma)
+        comprobacion,id_idioma = self.comprobar(idioma)
         idioma = idioma.getNombre().lower().capitalize()
         self.cnx._open_connection()
         cursor=self.cnx.cursor()
@@ -36,3 +40,12 @@ class Admin_idioma:
             cursor.close()
             self.cnx.close()
         return mensaje
+
+    def update(self,idioma):
+        comprobacion,id_idioma = self.comprobar(idioma)
+        idioma = idioma.getNombre().lower().capitalize()
+        self.cnx._open_connection()
+        cursor=self.cnx.cursor
+        if comprobacion == True:
+            actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma
+            cursor.execute(actualiza)

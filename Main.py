@@ -15,13 +15,16 @@ while menu:
     if opcion == "1":
         pass
     elif opcion == "2":
-        dato=input("Ingresar e idioma: ")
+        dato=input("Ingresar idioma: ")
         insert_idioma = Idioma(dato)
         adm_idioma = Admin_idioma()
         mensaje=adm_idioma.create(insert_idioma)
         print(mensaje)
     elif opcion == "3":
-        pass
+        dato=input("Ingresar idioma: ")
+        update_idioma = Idioma(dato)
+        upd_idioma= update_idioma.update(insert_idioma)
+        print()
     elif opcion == "4":
         pass
     elif opcion == "0":
