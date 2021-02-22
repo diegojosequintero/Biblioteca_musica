@@ -1,4 +1,3 @@
-import mysql.connector
 class Idioma:
     def __init__(self,nombre):
         self.__nombre= nombre
@@ -9,5 +8,5 @@ class Idioma:
 
     def setNombre(self,nombre):
         self.__nombre = nombre
-
+    
         
