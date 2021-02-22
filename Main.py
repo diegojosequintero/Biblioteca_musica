@@ -23,8 +23,8 @@ while menu:
     elif opcion == "3":
         dato=input("Ingresar idioma: ")
         update_idioma = Idioma(dato)
-        upd_idioma= update_idioma.update(insert_idioma)
-        print()
+        mensaje= Admin_idioma.update(update)
+        print(mensaje)
     elif opcion == "4":
         pass
     elif opcion == "0":

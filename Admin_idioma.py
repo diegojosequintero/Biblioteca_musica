@@ -46,6 +46,18 @@ class Admin_idioma:
         idioma = idioma.getNombre().lower().capitalize()
         self.cnx._open_connection()
         cursor=self.cnx.cursor
-        if comprobacion == True:
+        if comprobacion == False:
+            select_previo = "select nombre from idioma where ididioma = "+id_idioma
+            cursor.execute(select_previo)
+            idioma_previo = cursor.fetchone()
             actualiza= "update idioma id set nombre='"+idioma+"' where ididioma = "+id_idioma
             cursor.execute(actualiza)
+            self.cnx.commit()
+            mensaje = "Se ha actualizado el idioma "+idioma_previo+" a "+idioma
+            cursor.close()
+            self.cnx.close()
+        else:
+            mensaje = "El idioma "+idioma+" No existe en la base de datos"
+            cursor.close()
+            self.cnx.close()
+        
